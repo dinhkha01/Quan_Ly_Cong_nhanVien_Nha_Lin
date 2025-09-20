@@ -1,9 +1,11 @@
 package com.example.QuanLyNhanVien.controller;
 
+import com.example.QuanLyNhanVien.model.dto.SalaryCalculationDTO;
 import com.example.QuanLyNhanVien.model.dto.StaffDTO;
 import com.example.QuanLyNhanVien.model.entity.staff;
 import com.example.QuanLyNhanVien.service.StaffService;
 import jakarta.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -48,6 +51,16 @@ public class StaffController {
     @GetMapping
     public ResponseEntity<List<staff>> list() {
         return ResponseEntity.ok(staffService.list());
+    }
+
+    @GetMapping("/{id}/salary")
+    public ResponseEntity<SalaryCalculationDTO> calculateSalary(
+            @PathVariable("id") Long staffId,
+            @RequestParam("year") int year,
+            @RequestParam("month") int month,
+            @RequestParam("hourlyRate") BigDecimal hourlyRate) {
+        SalaryCalculationDTO result = staffService.calculateSalary(staffId, year, month, hourlyRate);
+        return ResponseEntity.ok(result);
     }
 }
 
